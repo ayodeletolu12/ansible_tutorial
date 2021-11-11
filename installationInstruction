@@ -47,6 +47,26 @@ tolulope@tolulope-OMEN-Laptop-15-ek0xxx:~/ansible_tutorial$ ansible all --key-fi
     "ping": "pong"
 }
  
+# To automate the same thing we did above with Ansible, it is important that I create ansible config file 
+# using ansible.cfg
+nano ansible.cfg
+[defaults]
+inventory = inventory
+private_key_file = ~/.ssh/ansible
+
+# by putting it in ansible config file will shorten the commands we run.
+
+Recall we run ansible all --key-file ~/.ssh/ansble -i inventory -m ping. with the config file we can shorten it by running
+
+ansible all -m ping
+
+# Another useful command to get info about all the hosts.
+ansible all -m gather_facts
+
+# if you want to limit to just one host
+ansible all -m gather_facts --limit 20.51.192.105
+
+You can use this command to pull info about your server and conpare with the your desired state. You can also use it to troubleshoot
 
 
 
