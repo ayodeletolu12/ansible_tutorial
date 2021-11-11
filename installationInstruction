@@ -1,0 +1,30 @@
+# This will capture the instructions on how to install Ansible
+
+It can be installed in different ways.
+
+I will be installing using the ubuntu package manager
+
+# Install Ansible on my ubuntu Linux
+sudo apt update
+sudo apt upgrade
+sudo apt install ansible -y
+
+Now that it is installed.
+
+# Create a directory for your Ansible project and change directroy into it
+mkdir ansible_tutorial && cd ansible_tutorial
+
+# Next is to create an Inventory that will capture the IP addresses of all the hostt we want to manage with ansible
+nano inventory
+
+# The inventory file opens up and enter the IP Addresses of all the host or servers you want to mange with ansible
+
+Here you can enter the IP addresses of the servers you want to manage with ansible or enter any fully qualified domain name 
+E.g 52.151.194.35
+
+
+
+
+
+
+Create an inventory directory that will contain all the IP addresses of the host we want to manage
