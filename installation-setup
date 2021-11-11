@@ -1,0 +1,73 @@
+# This will capture the instructions on how to install Ansible
+
+It can be installed in different ways.
+
+I will be installing using the ubuntu package manager
+
+# Install Ansible on my ubuntu Linux
+sudo apt update
+sudo apt upgrade
+sudo apt install ansible -y
+
+Now that it is installed.
+
+# Create a directory for your Ansible project and change directroy into it
+mkdir ansible_tutorial && cd ansible_tutorial
+
+# Next is to create an Inventory that will capture the IP addresses of all the hostt we want to manage with ansible
+nano inventory
+
+# The inventory file opens up and enter the IP Addresses of all the host or servers you want to mange with ansible
+
+Here you can enter the IP addresses of the servers you want to manage with ansible or enter any fully qualified domain name 
+E.g 52.151.194.35
+
+# Next is to run the ansible command to ensure that everything is working fine
+ansible all --key-file ~/.ssh/ansible -i inventory -m ping
+
+# --key-file means that we are given ansible to use the key file we generated in that path ~/.ssh/ansble
+# -m the module, we are using ping. there are a lot of modules
+
+This will make a connection with the servers
+
+# Result of the ansible command run
+tolulope@tolulope-OMEN-Laptop-15-ek0xxx:~/ansible_tutorial$ ansible all --key-file ~/.ssh/ansible -i inventory -m ping
+52.151.194.35 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+20.51.192.105 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+ 
+# To automate the same thing we did above with Ansible, it is important that I create ansible config file 
+# using ansible.cfg
+nano ansible.cfg
+[defaults]
+inventory = inventory
+private_key_file = ~/.ssh/ansible
+
+# by putting it in ansible config file will shorten the commands we run.
+
+Recall we run ansible all --key-file ~/.ssh/ansble -i inventory -m ping. with the config file we can shorten it by running
+
+ansible all -m ping
+
+# Another useful command to get info about all the hosts.
+ansible all -m gather_facts
+
+# if you want to limit to just one host
+ansible all -m gather_facts --limit 20.51.192.105
+
+You can use this command to pull info about your server and conpare with the your desired state. You can also use it to troubleshoot
+
+
+
+Create an inventory directory that will contain all the IP addresses of the host we want to manage
