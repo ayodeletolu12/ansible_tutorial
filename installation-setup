@@ -68,6 +68,18 @@ ansible all -m gather_facts --limit 20.51.192.105
 
 You can use this command to pull info about your server and conpare with the your desired state. You can also use it to troubleshoot
 
+# Ansible commands that make changes to the host
+# For example, I want to make ansible to update all my ubuntu servers
+ansible all -m apt -a update_cache=true --become --ask-become-pass
+
+# it will ask for the admin password
+
+# I want to install a package on all my servers 
+ansible all -m apt -a name=vim-nox --become --ask-become-pass
+
+The package name is vim-nox
+You can change the package name if you want to install another package
+
+ansible all -m apt -a name=tmux --become --ask-become-pass
 
 
-Create an inventory directory that will contain all the IP addresses of the host we want to manage
