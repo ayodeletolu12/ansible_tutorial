@@ -1,0 +1,9 @@
+# To update or upgrade packages on the host machines
+# If you want to have more than one arguments, put all the arguments inside "" with a space between them.
+# E.g I want to install snapd package and upgrade the status to the latest
+ansible all -m apt -a "name=snapd state=latest" --become --ask-become-pass
+
+# To upgrade all packages on the server
+ansible all -m apt -a "upgrade=dist" --become --ask-become-pass
+
+
