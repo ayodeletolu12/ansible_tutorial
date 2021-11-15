@@ -87,6 +87,27 @@ Rescued:
       state: absent   
    
 
+# How to distinguish between different distributions when running ansible again our servers
+# There are some situations that you will have different distros, versions on your server.
+# You can use the "when" to settle it.
 
+I have provisioned another server(CentOs in Azure). I want to use my existing playbook to include installation of httpd(CentOs) Apache2(Ubuntu)
 
+The apt in Ubuntu, will change to dnf for CentOs
 
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+# The command below will run when ansible-distribution is Ubuntu and when ansible_distribution is CentOS. It will 
+  - name: install apache and httpd on Ubuntu and Centos
+    apt:
+      name: apache2
+    when: ansible_distribution == "Ubuntu"  
+
+  - name: install httpd on CentOS
+    dnf:
+      name: httpd
+    when: ansible_distribution == "CentOS" 
