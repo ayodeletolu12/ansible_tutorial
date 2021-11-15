@@ -1,0 +1,92 @@
+# How to write ansible play books, just like txt files for config
+
+# Ansible  Playbooks.
+#  when we write ansible playbooks. we can define the state we want our servers to be in and the caommands that will bring our servers to that state
+
+# You can use the editor of your choice to write your playbook
+
+# ansible playbook extention format is .yml it is the standard extention for ansible playbook files format they are in the yaml format 
+
+# You begin playbook by typing three dashess. ---
+
+# To begin a playbook statement, you start with a dash -
+
+--- # The begining
+
+- hosts: all
+  become: true
+  tasks:
+    
+    - name: Install apache2 package
+      apt: 
+        name: apache2
+
+# To run the playbook against our servers, you use the ansible binary (ansible-playbook) --ask-become-pass playbookname
+ansible-playbook --ask-beome-pass install_apache.yml
+
+
+The Output will show the following
+
+Change: if 1 it will show the number changes made, if no changes were made, change will be 0
+
+Unreachable: This will show if the server was unreachable because of network or something like that
+
+Failed:
+
+Skipped
+
+Rescued:
+
+
+# You can have multiple play in a playbook, E.g
+
+--- 
+
+- hosts: name
+  become: true
+  tasks:
+
+   # Task 1
+  - name: update repository index
+    apt:
+      update_cache: yes
+
+   # Task 2
+  - name: install apache2 package
+    apt:
+      name: apache2
+      state: latest
+
+   # Task 3 
+  - name: add php support for apache
+    apt:
+      name: libapache2-mod-php
+      state: latest    
+ # You can have multiple tasks in a playbook, ensure you start your new task with -
+
+
+
+
+
+# You can also use playbook to remove packages from the server
+
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install apache package
+    apt:
+      name: apache2
+      state: absent
+
+  - name: add php support for apache
+    apt:
+      name: libapache2-mod-php
+      state: absent   
+   
+
+
+
+
