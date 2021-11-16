@@ -216,3 +216,26 @@ In the playbook file, you can have some task targets on all host, and your group
   tasks:
 
 
+# Tags
+
+# Adding tags to your play will help filter particular play yopu want ansible to run against.
+
+- hosts: web_server
+  become: true
+  tasks:
+
+  - name: ***************
+    tags: tagname, centos, apache, webserver
+
+# To list all the tags in a playbook
+ansible-playbook --list-tags playbook_name.yml
+
+
+# If I want to target the tag centos
+
+ansible-playbook --tags centos --ask-become-pass playbook_name.yml
+
+
+# If you want to target multiple tags
+
+ansible-playbook --tags "centos,apache,tagname" --ask-become-pass playbook_name.yml

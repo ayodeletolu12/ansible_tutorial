@@ -7,12 +7,14 @@
 
 
   - name: install updates (CentOS)
+    tags: always
     dnf:
       update_cache: yes
       update_only: yes
     when: ansible_distribution == "CentOS"
 
   - name: install updates (Ubuntu)
+    tags: always
     apt: 
       upgrade: dist
       update_cache: yes
@@ -25,6 +27,7 @@
 
 # The task will install apache and php on Ubuntu
   - name: install apache and php for Ubuntu Servers
+    tags: apache, apache2, ubuntu
     apt:
       name: 
         - apache2
@@ -34,6 +37,7 @@
 
 # This part will install apache and php on CentOS
   - name: install apache and php on CentOS Server
+    tags: centos, apache, httpd
     dnf:
       name:
         - httpd
@@ -49,12 +53,14 @@
   tasks:
 
   - name: install mariadb on my database server (CentOS)
+    tags: db, centos, mariab
     dnf:
       name: mariadb
       state: latest
     when: ansible_distribution == "CentOS"
 
   - name: install mariadb on my database server (ubuntu)
+    tags: ubuntu, mariab, db
     apt: 
       name: mariadb-server
       state: latest
@@ -68,6 +74,7 @@
   tasks:
 
   - name: install samba package
+    tags: samba
     package:
       name: samba
       state: latest
