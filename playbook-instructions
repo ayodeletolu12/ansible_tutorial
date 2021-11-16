@@ -111,3 +111,62 @@ The apt in Ubuntu, will change to dnf for CentOs
     dnf:
       name: httpd
     when: ansible_distribution == "CentOS" 
+
+# Refactoring playbook.that is minimizing your plays with few lines of code
+# You can put together all arguments that are using a paticular module
+# E.g apt module
+
+---
+
+  - hosts: all
+    become: true
+    tasks:
+       
+    - name: installing apache, php support package and updating the repo index
+      apt:
+        update_cache: yes
+        name:
+          - apache2    
+          - lib-apache2-mod-php
+        state: latest
+      when: ansible_distribution=="Ubuntu"
+
+    - name: installing httpd, php, package and update repo index on CentOS dist
+      dnf:
+        update_cache: yes
+        name: 
+          - httpd
+          - php
+        state: latest
+       when: ansible_distribution== "CentOS"
+
+
+
+# You can further reduce the play from 2 to 1
+# For the package manager(apt, yum, dnf etc) ansible has a generic package manager name called "package"when run against the servers, it will automatically pick the package manager of that server OS
+# You can declare a variable name as well using "{{ variable-name }}" and define the variable name in the inventory file
+
+Example
+
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install apache and php on servers with different distro
+    package:
+       name:
+         - "{{ apache_package }}"
+         - "{{ php_package }}"
+       state: latest
+       update_cache: yes
+
+# You will need to go to the Inventory file where you have the server IPs and define the variable names
+e.g
+20.51.192.105 apache_package=apache2 php_package=libapache2-mod-php
+52.151.194.35 apache_package=apache2 php_package=libapache2-mod-php
+13.82.125.79 apache_package=httpd php_package=php
+
+The example above used just 1 play to install apache package on servers with different OS distro
+ 
