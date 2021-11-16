@@ -170,3 +170,49 @@ e.g
 
 The example above used just 1 play to install apache package on servers with different OS distro
  
+
+# Run Ansible playbook to target specific servers.
+
+# Here you will need to group your servers for easy managment.
+
+# Open your inventory file
+
+[web_servers]
+20.51.192.105
+13.82.125.79
+
+[db-servers]
+52.151.194.35
+
+[file_servers]
+13.82.125.79
+
+
+In the playbook file, you can have some task targets on all host, and your grouped host
+
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+
+
+
+- hosts: web_servers
+  become: true
+  tasks: 
+
+
+
+- hosts: db_servers
+  become: true
+  tasks: 
+
+
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+
