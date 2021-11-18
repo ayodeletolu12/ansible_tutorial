@@ -54,7 +54,35 @@
       owner: root
       group: root
       mode: 0644
+ 
+    # How to use ansible module service: to manage services on the server
+    # This part will start the httpd service in CentOS
 
+  - name: start httpd (CentOS)
+    tags: apache,apache2,httpd
+    service:
+       name: httpd
+       state: started
+    when: ansible_distribution == "CentOS"
+
+   # make changes to a line in a config file
+  - name: change e-mail address for admin
+    tags: apache,apache2,httpd
+    lineinfile:
+       path: /etc/httpd/conf/httpd.conf
+       regexp: '^ServerAdmmin'
+       line: ServerAdmin tolulopeolorunfemi@yahoo.com
+    when: ansible_distribution == "CentOS"
+    register: httpd
+
+    # this part will restart the service when changes made above requires restart
+  - name: restart httpd (CentOS)
+    tags: apache,centos,httpd
+    service:
+        name: httpd
+        state: restarted
+    when: httpd.changed
+   
 # This part will target my db_servers grouped in the inventory
 
 - hosts: db_servers
