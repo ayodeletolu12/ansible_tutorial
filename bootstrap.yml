@@ -1,0 +1,54 @@
+---
+
+# This play should always run whenever this playbook is executed
+- hosts: all
+  become: true
+  pre_tasks: 
+
+    # Install updates on CentOs servers
+  - name: install updates (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+    # Install updates on Ubuntu servers
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  # Create user and add him to all the servers
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create a user toluene
+    tags: always
+    user:
+      name: toluene
+      groups: root
+      
+
+  # How to configure the user to be kind of like our ansible user to run ansible
+  # jobs in the background. We want ansible to be fully automated
+
+  # This play will make ansible add ssh key for user Toluene that is the authorized key for user toluene. he wont be signing in using password or passphrase
+  - name: add ssh key for toluene
+    tags: always
+    authorized_key:
+       user: toluene
+       key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHU0BtY04XuAu41PKoacG8f/vCGtygOOV86rXwXlv9lF Ansible" 
+      
+ # when toluene is running I want toluene to use sudo privileges without password
+  - name: add sudoers file for toluene
+    tags: always
+    copy:
+      src: sudoer_toluene
+      dest: /etc/sudoers.d/toluene
+      owner: root
+      group: root
+      mode: 0440
