@@ -1,0 +1,168 @@
+---
+
+# This part will run a play against all the host irrespective of the group the hosts belong
+- hosts: all
+  become: true
+  pre_tasks:
+
+
+  - name: update repository index (CentOS)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "CentOS"
+
+  - name: update repository index (Ubuntu)
+    tags: always
+    apt: 
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  roles:
+    - base
+
+- hosts: workstations
+  become: true
+  roles:
+    - workstations
+
+- hosts: web_servers
+  become: true
+  roles:
+    - web_servers
+
+- hosts: db_servers
+  become: true
+  roles:
+    - db_servers
+
+- hosts: file_servers
+  become: true
+  roles:
+    - file_servers
+
+
+
+# This part will run ansible play against or target the group(web_servers) hosts grouped in my inventory
+
+# The part below has been distributed to different roles
+# - hosts: web_servers
+#  become: true
+#  tasks: 
+
+    # The task will install apache and php on Ubuntu
+# - name: install apache and php for Ubuntu Servers
+#    tags: apache, apache2, ubuntu
+#    apt:
+#      name: 
+#        - apache2
+#        - libapache2-mod-php
+#      state: latest	
+#    when: ansible_distribution == "Ubuntu"
+
+    # This part will install apache and php on CentOS
+#  - name: install apache and php on CentOS Server
+#    tags: centos, apache, httpd
+#    dnf:
+#      name:
+#        - httpd
+#        - php
+#      state: latest
+#    when: ansible_distribution == "CentOS"
+
+    # This part will use the ansible copy module to copy files to the webservers
+#  - name: copy default html file for site 
+#    tags: apache,apache2,httpd
+#    copy:
+#      src: default_site.html
+#      dest: /var/www/html/index.html
+#      owner: root
+#      group: root
+#      mode: 0644
+ 
+    # How to use ansible module service: to manage services on the server
+    # This part will start the httpd service in CentOS
+
+#  - name: start httpd (CentOS)
+#    tags: apache,apache2,httpd
+#    service:
+#       name: httpd
+#       state: started
+#    when: ansible_distribution == "CentOS"
+
+   # make changes to a line in a config file
+#  - name: change e-mail address for admin
+#    tags: apache,apache2,httpd
+#    lineinfile:
+#       path: /etc/httpd/conf/httpd.conf
+#       regexp: '^ServerAdmmin'
+#       line: ServerAdmin tolulopeolorunfemi@yahoo.com
+#    when: ansible_distribution == "CentOS"
+#    register: httpd
+
+    # this part will restart the service when changes made above requires restart
+#  - name: restart httpd (CentOS)
+#    tags: apache,centos,httpd
+#    service:
+#        name: httpd
+#        state: restarted
+#    when: httpd.changed
+   
+# This part will target my db_servers grouped in the inventory
+
+#- hosts: db_servers
+#  become: true
+#  tasks:
+
+#  - name: install mariadb on my database server (CentOS)
+#    tags: db, centos, mariab
+#    dnf:
+#      name: mariadb
+#      state: latest
+#    when: ansible_distribution == "CentOS"
+
+#  - name: install mariadb on my database server (ubuntu)
+#    tags: ubuntu, mariab, db
+#    apt: 
+#      name: mariadb-server
+#      state: latest
+#    when: ansible_distribution == "Ubuntu"
+
+
+# This part will target my file_servers
+
+#- hosts: file_servers
+#  become: true
+#  tasks:
+
+#  - name: install samba package
+#    tags: samba
+#    package:
+#      name: samba
+#      state: latest
+
+# This part will target my Workstation in the inventory
+
+#- hosts: workstations
+#  become: true
+#  tasks:
+ 
+    # This play will install the unzip package to unzip zipped files using terminal
+#  - name: install unzip package
+#    package:
+#        name: unzip
+
+    # This play will use the unarchive module of ansible to unzip the terraform zipped package downloaded from the source. 
+    # I want Terraform binary to reside in /usr/local/bin directory 
+#  - name: install terraform using ansible unarchive module to unzip the terraform package
+#    unarchive:
+#        src: https://releases.hashicorp.com/terraform/1.0.11/terraform_1.0.11_linux_amd64.zip 
+#        dest: /usr/local/bin
+#        remote_src: yes
+#        mode: 0755
+#        owner: root
+#        group: root
