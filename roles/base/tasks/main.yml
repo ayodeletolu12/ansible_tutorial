@@ -2,3 +2,13 @@
   authorized_key:
       user: toluene
       key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHU0BtY04XuAu41PKoacG8f/vCGtygOOV86rXwXlv9lF Ansible"
+
+- name: generate sshd_config file from template
+  tags: ssh
+  template:
+      src: "{{ ssh_template_file }}"
+      dest: /etc/ssh/ssh_config
+      owner: root
+      group: root
+      mode: 0644
+  notify: restart_sshd
