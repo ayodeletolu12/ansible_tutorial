@@ -1,0 +1,4 @@
+- name: add ssh key for toluene
+  authorized_key:
+      user: toluene
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHU0BtY04XuAu41PKoacG8f/vCGtygOOV86rXwXlv9lF Ansible"
